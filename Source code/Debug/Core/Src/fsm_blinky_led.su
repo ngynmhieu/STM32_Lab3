@@ -1,0 +1,4 @@
+fsm_blinky_led.c:11:6:time_duration_treated	24	static
+fsm_blinky_led.c:16:6:blinking_red_led	8	static
+fsm_blinky_led.c:24:6:blinking_led	16	static
+fsm_blinky_led.c:38:6:fsm_blinky_led	16	static
