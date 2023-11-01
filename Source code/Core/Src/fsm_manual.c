@@ -7,6 +7,15 @@
 
 
 #include "fsm_manual.h"
+int red_his = 0;
+int yellow_his = 0;
+int green_his = 0;
+
+void led_time_saved(){
+	red_his = red_time/100;
+	yellow_his = yellow_time/100;
+	green_his = green_time/100;
+}
 
 void turnoff_leds(){
 	HAL_GPIO_WritePin(red1_GPIO_Port, red1_Pin, SET);
@@ -89,20 +98,31 @@ void check_time_valid(){
 	int red_t = red_time/100;
 	int yellow_t = yellow_time/100;
 	int green_t = green_time/100;
-	if (red_t > (yellow_t + green_t)){
-		int remainder = red_t - yellow_t - green_t;
-		green_t = green_t + remainder/2;
-		yellow_t = red_t - green_t;
+
+	if (red_t == 1 || yellow_t == 1 || green_t == 1){
+		red_t = red_his;
+		yellow_t = yellow_his;
+		green_t = green_his;
 	}
-	else if (red_t < (yellow_t + green_t)){
-		red_t  = yellow_t + green_t;
+	else{
+		if (red_t < (yellow_t + green_t)){
+			red_t = yellow_t + green_t;
+		}
+		else if (red_t > (yellow_t + green_t)){
+			if (yellow_t == yellow_his){
+				yellow_t = red_t - green_t;
+			}
+			else if (green_t == green_his){
+				green_t = red_t - yellow_t;
+			}
+		}
+		if (yellow_t > green_t) {
+			int temp = yellow_t;
+			yellow_t = green_t;
+			green_t = temp;
+		}
 	}
 
-	if (yellow_t > green_t){
-		int tmp = green_t;
-		green_t = yellow_t;
-		yellow_t= tmp;
-	}
 	red_time = red_t*100;
 	yellow_time = yellow_t*100;
 	green_time = green_t*100;
@@ -113,6 +133,7 @@ void fsm_manual(){
 	int index_1 = 0;
 	switch(status){
 	case mode_2:
+		led_time_saved();
 		blinky_red_led();
 		number_for2led(tmp_red, &index_0, &index_1);
 		timefortopbottom(0, 2);
