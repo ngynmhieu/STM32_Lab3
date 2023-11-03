@@ -339,7 +339,6 @@ void fsm_auto(){
 		enablechange();
 		timechange(&tmp_red, &tmp_green);
 
-
 		button1_check();
 		break;
 	case red_yellow:
@@ -360,7 +359,7 @@ void fsm_auto(){
 		enablechange();
 		timechange(&tmp_red, &tmp_yellow);
 
-		button1_check();
+
 		break;
 	case green_red:
 		led_turnon(green_led, topbottom);
@@ -379,7 +378,6 @@ void fsm_auto(){
 		enablechange();
 		timechange(&tmp_green, &tmp_red);
 
-		button1_check();
 		break;
 	case yellow_red:
 		led_turnon(yellow_led, topbottom);
@@ -398,9 +396,6 @@ void fsm_auto(){
 
 		enablechange();
 		timechange(&tmp_yellow, &tmp_red);
-
-
-		button1_check();
 		break;
 
 	}

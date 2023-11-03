@@ -35,7 +35,7 @@ void button1_check(){
 		if (status == mode_2) status = mode_3;
 		else if (status == mode_3) status = mode_4;
 		else if (status == mode_4) status = init;
-		else status = mode_2;
+		else if (status == red_green) status = mode_2;
 
 	}
 
