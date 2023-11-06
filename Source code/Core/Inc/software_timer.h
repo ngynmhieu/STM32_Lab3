@@ -20,4 +20,5 @@ void setTimer2(int duration);
 void setTimer3(int duration);
 void setTimer4(int duration);
 void timerRun();
+void initialize_issue();
 #endif /* INC_SOFTWARE_TIMER_H_ */

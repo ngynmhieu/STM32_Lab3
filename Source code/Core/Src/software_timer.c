@@ -16,21 +16,37 @@ int timer3_counter = 0;
 int timer3_flag = 0;
 int timer4_counter = 0;
 int timer4_flag = 0;
+TIM_HandleTypeDef htim2;
+
+// Declare the variables
+uint32_t prescaler_value;
+uint32_t counter_period_value;
+int Timer;
+void initialize_issue()
+{
+    HAL_TIM_Base_Start(&htim2);
+
+    prescaler_value = htim2.Instance->PSC;
+    counter_period_value = htim2.Instance->ARR;
+    Timer = 1000*(prescaler_value + 1)*(counter_period_value)/8000000;
+}
+
+
 
 void setTimer1(int duration){
-	timer1_counter = duration;
+	timer1_counter = duration*Timer/10;
 	timer1_flag = 0;
 }
 void setTimer2(int duration){
-	timer2_counter = duration;
+	timer2_counter = duration*Timer/10;
 	timer2_flag = 0;
 }
 void setTimer3(int duration){
-	timer3_counter = duration;
+	timer3_counter = duration*Timer/10;
 	timer3_flag = 0;
 }
 void setTimer4(int duration){
-	timer4_counter = duration;
+	timer4_counter = duration*Timer/10;
 	timer4_flag = 0;
 }
 

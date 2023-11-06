@@ -95,7 +95,7 @@ HAL_TIM_Base_Start_IT(&htim2);
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
+initialize_issue();
   while (1)
   {
     /* USER CODE END WHILE */
