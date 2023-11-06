@@ -34,19 +34,19 @@ void initialize_issue()
 
 
 void setTimer1(int duration){
-	timer1_counter = duration*Timer/10;
+	timer1_counter = duration*10/Timer;
 	timer1_flag = 0;
 }
 void setTimer2(int duration){
-	timer2_counter = duration*Timer/10;
+	timer2_counter = duration*10/Timer;
 	timer2_flag = 0;
 }
 void setTimer3(int duration){
-	timer3_counter = duration*Timer/10;
+	timer3_counter = duration*10/Timer;
 	timer3_flag = 0;
 }
 void setTimer4(int duration){
-	timer4_counter = duration*Timer/10;
+	timer4_counter = duration*10/Timer;
 	timer4_flag = 0;
 }
 
