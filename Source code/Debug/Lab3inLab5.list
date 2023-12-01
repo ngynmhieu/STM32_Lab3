@@ -2985,7 +2985,6 @@ uint32_t SCH_Add_Task(void (* pFunction)(), uint32_t DELAY, uint32_t PERIOD){
  80014a6:	6053      	str	r3, [r2, #4]
 	return 0;
  80014a8:	2300      	movs	r3, #0
-	return 0;
 }
  80014aa:	4618      	mov	r0, r3
  80014ac:	3720      	adds	r7, #32

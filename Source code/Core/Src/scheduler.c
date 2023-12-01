@@ -57,7 +57,6 @@ uint32_t SCH_Add_Task(void (* pFunction)(), uint32_t DELAY, uint32_t PERIOD){
 
 	company.number++;
 	return 0;
-	return 0;
 }
 uint8_t SCH_Delete_Task(uint32_t taskID){
 	if (company.number == 0) return 0;
