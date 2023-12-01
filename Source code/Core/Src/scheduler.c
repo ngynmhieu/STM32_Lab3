@@ -13,8 +13,14 @@ uint32_t taskid = 0;
 char str[50];
 
 
+uint32_t SCH_Add_Task(void (* pFunction)(), uint32_t DELAY, uint32_t PERIOD){
+	worker_t * task = (worker_t *)malloc(sizeof(worker_t));
+	task->taskPointer = pFunction;
+	task->taskID = taskid++;
+	task->Delay = DELAY;
+	task->Period = PERIOD;
+	task->nextTask = NULL;
 
-int addTask(worker_t* task){
 	if (company.number >= SCH_MAX_TASKS){
 		return 0 ;
 		//company is full
@@ -51,19 +57,9 @@ int addTask(worker_t* task){
 
 	company.number++;
 	return 0;
-}
-uint32_t SCH_Add_Task(void (* pFunction)(), uint32_t DELAY, uint32_t PERIOD){
-	worker_t * task = (worker_t *)malloc(sizeof(worker_t));
-	task->taskPointer = pFunction;
-	task->taskID = taskid++;
-	task->Delay = DELAY;
-	task->Period = PERIOD;
-	task->nextTask = NULL;
-
-	addTask(task);
 	return 0;
 }
-int deleteTask(uint32_t taskID){
+uint8_t SCH_Delete_Task(uint32_t taskID){
 	if (company.number == 0) return 0;
 	worker_t *current = company.head;
 	worker_t *prev = NULL;
@@ -96,10 +92,6 @@ int deleteTask(uint32_t taskID){
 	company.number --;
 
 
-	return 0;
-}
-uint8_t SCH_Delete_Task(uint32_t taskID){
-	deleteTask(taskID);
 	return 0;
 }
 void SCH_Dispatch_Tasks(){
