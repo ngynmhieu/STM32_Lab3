@@ -1,7 +1,7 @@
 /*
- * fsm_mode.h
+ * fsm_manual.h
  *
- *  Created on: Oct 22, 2023
+ *  Created on: Nov 24, 2023
  *      Author: Minh Hieu
  */
 
@@ -9,12 +9,9 @@
 #define INC_FSM_MANUAL_H_
 #include "global.h"
 
-
-
-
-
-void button1_check();
-void turnoff_leds();
+extern int red_time_tmp;
+extern int yellow_time_tmp;
+extern int green_time_tmp;
 void fsm_manual();
 
 #endif /* INC_FSM_MANUAL_H_ */

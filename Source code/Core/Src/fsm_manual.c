@@ -1,174 +1,101 @@
 /*
- * fsm_mode.c
+ * fsm_manual.c
  *
- *  Created on: Oct 22, 2023
+ *  Created on: Nov 24, 2023
  *      Author: Minh Hieu
  */
-
-
 #include "fsm_manual.h"
-int red_his = 0;
-int yellow_his = 0;
-int green_his = 0;
 
-void led_time_saved(){
-	red_his = red_time/100;
-	yellow_his = yellow_time/100;
-	green_his = green_time/100;
-}
 
-void turnoff_leds(){
-	HAL_GPIO_WritePin(red1_GPIO_Port, red1_Pin, SET);
-	HAL_GPIO_WritePin(yellow1_GPIO_Port, yellow1_Pin, SET);
-	HAL_GPIO_WritePin(green1_GPIO_Port, green1_Pin, SET);
-	HAL_GPIO_WritePin(red2_GPIO_Port, red2_Pin, SET);
-	HAL_GPIO_WritePin(yellow2_GPIO_Port, yellow2_Pin, SET);
-	HAL_GPIO_WritePin(green2_GPIO_Port, green2_Pin, SET);
-}
-void button1_check(){
-	if (isButton1Pressed() == 1){
-		tmp_red = 1;
-		tmp_yellow= 1;
-		tmp_green = 1;
-		turnoff_leds();
-		setTimer4(50); // time duration for blinking led (used for blinky led file)
-		if (status == mode_2) status = mode_3;
-		else if (status == mode_3) status = mode_4;
-		else if (status == mode_4) status = init;
-		else if (status == red_green) status = mode_2;
+int red_time_tmp, yellow_time_tmp, green_time_tmp;
 
+void turnbackINIT(){
+	if (red_time < 1 || yellow_time < 1 ||
+			green_time < 1){
+		red_time = 5;
+		yellow_time = 2;
+		green_time = 3;
 	}
-
+	red_time = green_time + yellow_time;
+	status = INIT;
 }
-
-void button2_check(){
-	if (isButton2Pressed() == 1){
-		if (status == mode_2){
-			tmp_red ++;
-			if (tmp_red > 99) tmp_red = 99;
+void checkButton1(){
+	if (isButtonPressed(0) == 1){
+		//reset set timer
+		if (status == MANUAL_RED) {
+			status = MANUAL_YELLOW;
 		}
-		else if (status == mode_3){
-			tmp_yellow ++;
-			if (tmp_yellow > 99) tmp_yellow = 99;
+		else if (status == MANUAL_YELLOW) {
+			status = MANUAL_GREEN;
 		}
-		else if (status == mode_4){
-			tmp_green ++;
-			if (tmp_green > 99) tmp_green = 99;
+		else if (status == MANUAL_GREEN) {
+			turnbackINIT();
+		}
+		else {
+			status = MANUAL_INIT;
 		}
 	}
 }
 
-void button3_check(){
-	if (isButton3Pressed() == 1){
-		if (status == mode_2){
-			red_time = tmp_red*100;
-		}
-		else if (status == mode_3){
-			yellow_time = tmp_yellow*100;
-		}
-		else if (status == mode_4){
-			green_time = tmp_green*100;
-		}
-	}
-}
-
-void blinky_red_led(){
-	if (timer4_flag == 1){
-		setTimer4(50);
-		HAL_GPIO_TogglePin(red1_GPIO_Port, red1_Pin);
-		HAL_GPIO_TogglePin(red2_GPIO_Port, red2_Pin);
-	}
-}
-void blinky_yellow_led(){
-	if (timer4_flag == 1){
-		setTimer4(50);
-		HAL_GPIO_TogglePin(yellow1_GPIO_Port, yellow1_Pin);
-		HAL_GPIO_TogglePin(yellow2_GPIO_Port, yellow2_Pin);
-	}
-}
-void blinky_green_led(){
-	if (timer4_flag == 1){
-		setTimer4(50);
-		HAL_GPIO_TogglePin(green1_GPIO_Port, green1_Pin);
-		HAL_GPIO_TogglePin(green2_GPIO_Port, green2_Pin);
-	}
-}
-
-void check_time_valid(){
-	int red_t = red_time/100;
-	int yellow_t = yellow_time/100;
-	int green_t = green_time/100;
-
-	if (red_t == 1 || yellow_t == 1 || green_t == 1){
-		red_t = red_his;
-		yellow_t = yellow_his;
-		green_t = green_his;
-	}
-	else{
-		if (red_t < (yellow_t + green_t)){
-			red_t = yellow_t + green_t;
-		}
-		else if (red_t > (yellow_t + green_t)){
-			if (yellow_t == yellow_his){
-				yellow_t = red_t - green_t;
-			}
-			else if (green_t == green_his){
-				green_t = red_t - yellow_t;
+void checkButton2(){
+	if (isButtonPressed(1) == 1){
+		if (status == MANUAL_RED){
+			if (red_time_tmp < 99) {
+				red_time_tmp++;
 			}
 		}
-		if (yellow_t > green_t) {
-			int temp = yellow_t;
-			yellow_t = green_t;
-			green_t = temp;
+		if (status == MANUAL_YELLOW){
+			if (yellow_time_tmp < 99){
+				yellow_time_tmp++;
+			}
+		}
+		if (status == MANUAL_GREEN){
+			if (green_time_tmp < 99) {
+				green_time_tmp++;
+			}
 		}
 	}
-
-	red_time = red_t*100;
-	yellow_time = yellow_t*100;
-	green_time = green_t*100;
 }
+void checkButton3(){
+	if (isButtonPressed(2) == 1){
+		if (status == MANUAL_RED){
+			red_time = red_time_tmp;
+		}
+		else if (status == MANUAL_YELLOW){
+			yellow_time = yellow_time_tmp;
+		}
+		else if (status == MANUAL_GREEN){
+			green_time = green_time_tmp;
+		}
+		//when confirm the time, flag =0 to reset timer again
+	}
+}
+
 
 void fsm_manual(){
-	int index_0 = 0;
-	int index_1 = 0;
-	switch(status){
-	case mode_2:
-		led_time_saved();
-		blinky_red_led();
-		number_for2led(tmp_red, &index_0, &index_1);
-		timefortopbottom(0, 2);
-		timeforleftright(index_0, index_1);
-
-		enablechange();
-		button1_check();
-		button2_check();
-		button3_check();
+	checkButton1();
+	switch (status){
+	case MANUAL_INIT:
+		red_time_tmp = 0;
+		yellow_time_tmp= 0;
+		green_time_tmp = 0;
+		status = MANUAL_RED; //auto state -> manual state
+	case MANUAL_RED:
+		checkButton2();
+		checkButton3();
 		break;
-	case mode_3:
-		blinky_yellow_led();
-		number_for2led(tmp_yellow, &index_0, &index_1);
-		timefortopbottom(0, 3);
-		timeforleftright(index_0, index_1);
-
-		enablechange();
-		button1_check();
-		button2_check();
-		button3_check();
+	case MANUAL_YELLOW:
+		checkButton2();
+		checkButton3();
 		break;
-	case mode_4:
-		blinky_green_led();
-		number_for2led(tmp_green, &index_0, &index_1);
-		timefortopbottom(0, 4);
-		timeforleftright(index_0, index_1);
-
-		enablechange();
-		button1_check();
-		button2_check();
-		button3_check();
-
-		check_time_valid();
+	case MANUAL_GREEN:
+		checkButton2();
+		checkButton3();
 		break;
-	default:
-		break;
+	default: break;
 	}
+
+
+
+
 }

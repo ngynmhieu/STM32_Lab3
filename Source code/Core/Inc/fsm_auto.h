@@ -1,7 +1,7 @@
 /*
- * fsm_traffic_light.h
+ * fsm_auto.h
  *
- *  Created on: Oct 22, 2023
+ *  Created on: Nov 24, 2023
  *      Author: Minh Hieu
  */
 
@@ -10,29 +10,9 @@
 
 #include "global.h"
 
-
-
-
-#define topbottom 122
-#define leftright 123
-
-#define red_led 90
-#define yellow_led 91
-#define green_led 92
-
-
-//enable_trigger
-extern int enable_trigger;
-void enablechange();
-//temp variable for timer
-extern int tmp_red;
-extern int tmp_yellow;
-extern int tmp_green;
-
-void display7SEGtopbottom(int number);
-void display7SEGleftright(int number);
-void timefortopbottom(int num0, int num1);
-void timeforleftright(int num0, int num1);
-void number_for2led(int duration, int *index_0, int *index_1);
-void fsm_auto();
 #endif /* INC_FSM_AUTO_H_ */
+
+extern int red_time_show;
+extern int yellow_time_show;
+extern int green_time_show;
+void fsm_auto();

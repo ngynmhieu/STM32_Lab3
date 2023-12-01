@@ -1,0 +1,14 @@
+scanLed.c:12:6:turnoffAll	8	static
+scanLed.c:20:6:display7SEGtopbottom	16	static
+scanLed.c:112:6:display7SEGleftright	16	static
+scanLed.c:205:6:onRed1	8	static
+scanLed.c:210:6:onYellow1	8	static
+scanLed.c:215:6:onGreen1	8	static
+scanLed.c:220:6:onRed2	8	static
+scanLed.c:225:6:onYellow2	8	static
+scanLed.c:230:6:onGreen2	8	static
+scanLed.c:235:6:toggleRed	8	static
+scanLed.c:244:6:toggleYellow	8	static
+scanLed.c:253:6:toggleGreen	8	static
+scanLed.c:263:6:counterBoard	32	static
+scanLed.c:287:6:scanLed	8	static
